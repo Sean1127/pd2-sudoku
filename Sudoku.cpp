@@ -1,0 +1,4 @@
+void Sudoku::a(b)
+{
+	;
+}
