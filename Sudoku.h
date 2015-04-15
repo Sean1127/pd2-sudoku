@@ -8,5 +8,4 @@ public:
 	void ReadIn();
 	void Solve(int board[]);
 	int board[144];
-private:
 };
