@@ -1,50 +1,61 @@
 #include "Sudoku.h"
 using namespace std;
-int Next(int board[144], int location);
+int Next(int board[12][12], int x, int y);
 bool CheckValid();
-int BackTrack(int (&board)[144], int location);
-//
+int BackTrack(int (&board)[12][12], int x, int y);
+
 int main()
 {
 	Sudoku s;
 	s.ReadIn();
-	BackTrack(s.board, Next(s.board, 0));	
+	int x = Next(s.board, 0, 0)%12;
+	int y = Next(s.board, 0, 0)/12;
+	BackTrack(s.board, x, y);	
 	s.Solve(s.board);
 	return 0;
 }
-//
-int Next(int board[144], int location)
+
+int Next(int board[12][12], int x, int y)
 {
 	int target = -1;
-	for (int i = location; i < 144; i++)
+	for (int i = y; i < 12; i++)
 	{
-		if (board[i] == 0)
+		for (int j = x; j < 12; j++)
 		{
-			target = i;
-			break;
+			if (board[i][j] == 0)
+			{
+				x = j;
+			y = i;
+			target = x + y*12;
+				break;
+			}
 		}
 	}
 	return target;
 }
+//
 bool CheckValid()
 {
-	return false;
+	return true;
 }
-int BackTrack(int (&board)[144], int location)
+//
+int BackTrack(int (&board)[12][12], int x, int y)
 {
-	if (Next(board, location) == -1)
+	if (Next(board, x, y) == -1)
 		return true;
 	for (int i = 0; i < 9; i++)
 	{
-		board[location] = i;
+		board[x][y] = i;
 		if (CheckValid() == true)
 		{
-			if (BackTrack(board, Next(board, location)) == true)
+			int nextx = Next(board, x, y)%12;
+			int nexty = Next(board, x, y)/12;
+			if (BackTrack(board, nextx, nexty) == true)
 			{
 				return true;
 			}
 		}
 	}
-	board[location] = 0;
+	board[x][y] = 0;
 	return false;
 }
