@@ -12,7 +12,12 @@ void Sudoku::GiveQuestion(int board[])
 }
 void Sudoku::ReadIn()
 {
-	
+	int i = 0, temp;
+	while (cin >> temp)
+	{
+		board[i] = temp;
+		i++;
+	}
 }
 void Sudoku::Solve(int board[])
 {

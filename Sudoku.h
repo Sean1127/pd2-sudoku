@@ -7,5 +7,6 @@ public:
 	void GiveQuestion(int board[]);
 	void ReadIn();
 	void Solve(int board[]);
+	int board[144];
 private:
 };
