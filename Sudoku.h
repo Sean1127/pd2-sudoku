@@ -4,7 +4,8 @@ using namespace std;
 
 class Sudoku{
 public:
-	set();
+	void GiveQuestion(int board[]);
+	void ReadIn();
+	void Solve(int board[]);
 private:
-	a;
-}
+};

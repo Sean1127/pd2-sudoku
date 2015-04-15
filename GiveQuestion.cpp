@@ -1,12 +1,11 @@
-//#include "Sudoku.h"
-#include <iostream>
-#include <fstream>
+#include "Sudoku.h"
 using namespace std;
 int main()
 {
 	int board[144];
 	int A[9], B[9], C[9], D[9], E[9], F[9], G[9], H[9], I[9];
-	int i, j;
+	int i, j, k;
+	Sudoku s;
 	for (i = 0; i < 9; i++)//central cell/dark cell
 	{
 		E[i] = i + 1;
@@ -87,13 +86,7 @@ int main()
 			board[i + j + 9] = -1;
 		}
 	}
-	for (i = 0; i < 144; i += 12)//show the board
-	{
-		for (j = 0; j < 12; j++)
-		{
-			cout << board[i + j] << " ";
-		}
-		cout << endl;
-	}
+	//dig hole
+	s.GiveQuestion(board);//show board
 	return 0;
 }
