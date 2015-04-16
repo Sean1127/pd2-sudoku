@@ -1,7 +1,8 @@
 #include "Sudoku.h"
 using namespace std;
 int Next(int board[12][12], int x, int y);
-bool CheckValid(int board[12][12], int x, int y, int i);
+bool CheckUnity(int arr[], int size);
+bool CheckValid(int board[12][12], int x, int y);
 int BackTrack(int (&board)[12][12], int x, int y);
 
 int main()
@@ -10,7 +11,7 @@ int main()
 	s.ReadIn();
 	int x = Next(s.board, 0, 0)%12;//find first x
 	int y = Next(s.board, 0, 0)/12;//find first y
-	BackTrack(s.board, x, y);	
+	BackTrack(s.board, x, y);
 	s.Solve(s.board);
 	return 0;
 }
@@ -18,16 +19,20 @@ int main()
 bool CheckUnity(int arr[], int size)
 {
 	int unity[size];
-	int i;
-	for (i = 0; i < size; ++i)
+	for (int i = 0; i < size; ++i)
+	{
 		unity[i] = 0;
-	for (i = 0; i < size; ++i)
-		if (arr[i] < 1)
-			i++;
-		++unity[arr[i] - 1];
-	for (i = 0; i < size; ++i)
+	}
+	for (int i = 0; i < size; ++i)
+	{
+		if (arr[i] > 0)
+			++unity[arr[i] - 1];
+	}
+	for (int i = 0; i < size; i++)
+	{
 		if (unity[i] > 1)
 			return false;
+	}
 	return true;
 }
 
@@ -50,16 +55,20 @@ int Next(int board[12][12], int x, int y)
 	return target;
 }
 
-bool CheckValid(int board[12][12], int x, int y, int n)
+bool CheckValid(int board[12][12], int x, int y)
 {
 	int arr[12];
 	int i, j, k = 0;
 	for (i = 0; i < 12; i++)//check row
-		arr[i] = board[i][y];
+	{
+		arr[i] = board[y][i];
+	}
 	if (CheckUnity(arr, 12) == false)
 		return false;
 	for (i = 0; i < 12; i++)//check column
-		arr[i] = board[x][i];
+	{
+		arr[i] = board[i][x];
+	}
 	if (CheckUnity(arr, 12) == false)
 		return false;
 	switch (x%3)//locate block x
@@ -86,9 +95,13 @@ bool CheckValid(int board[12][12], int x, int y, int n)
 			i = y - 2;
 			break;
 	}
-	for (; j < j + 3; j++)//check block
-		for (; i < i + 3; i++)
-			 arr[k++] = board[j][i];
+	for (int m = j; m < j + 3; m++)//check block
+	{
+		for (int n = i; n < i + 3; n++)
+		{
+			 arr[k++] = board[n][m];
+		}
+	}
 	if (CheckUnity(arr, 9) == false)
 		return false;
 	return true;
@@ -101,7 +114,7 @@ int BackTrack(int (&board)[12][12], int x, int y)
 	for (int i = 1; i < 10; i++)//guess from 1 to 9
 	{
 		board[x][y] = i;
-		if (CheckValid(board, x, y, i) == true)
+		if (CheckValid(board, x, y) == true)
 		{
 			int nextx = Next(board, x, y)%12;
 			int nexty = Next(board, x, y)/12;
