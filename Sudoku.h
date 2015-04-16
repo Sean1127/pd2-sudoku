@@ -1,10 +1,12 @@
 #include <iostream>
 #include <fstream>
+#include <cstdlib>
+#include <ctime>
 using namespace std;
 
 class Sudoku{
 public:
-	void GiveQuestion(int board[144]);
+	void GiveQuestion();
 	void ReadIn();
 	void Solve(int board[12][12]);
 	int board[12][12];
