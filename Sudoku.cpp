@@ -1,4 +1,130 @@
 #include "Sudoku.h"
+
+bool Sudoku::CheckUnity(int arr[], int size)
+{
+	int unity[size];
+	for (int i = 0; i < size; ++i)
+	{
+		unity[i] = 0;
+	}
+	for (int i = 0; i < size; ++i)
+	{
+		if (arr[i] > 0)
+			++unity[arr[i] - 1];
+	}
+	for (int i = 0; i < size; i++)
+	{
+		if (unity[i] > 1)
+			return false;
+	}
+	return true;
+}
+
+bool Sudoku::CheckValid(int board[12][12], int x, int y)
+{
+	int arr[12];
+	int i, j, k = 0;
+	for (i = 0; i < 12; i++)//check row
+	{
+		arr[i] = board[y][i];
+	}
+	if (CheckUnity(arr, 12) == false)
+		return false;
+	for (i = 0; i < 12; i++)//check column
+	{
+		arr[i] = board[i][x];
+	}
+	if (CheckUnity(arr, 12) == false)
+		return false;
+	switch (x%3)//locate block x
+	{
+		case 0:
+			j = x;
+			break;
+		case 1:
+			j = x - 1;
+			break;
+		case 2:
+			j = x - 2;
+			break;
+	}
+	switch (y%3)//locate block y
+	{
+		case 0:
+			i = y;
+			break;
+		case 1:
+			i = y - 1;
+			break;
+		case 2:
+			i = y - 2;
+			break;
+	}
+	for (int m = j; m < j + 3; m++)//check block
+	{
+		for (int n = i; n < i + 3; n++)
+		{
+			 arr[k++] = board[n][m];
+		}
+	}
+	if (CheckUnity(arr, 9) == false)
+		return false;
+	return true;
+}
+
+int Sudoku::Next(int board[12][12], int location)
+{
+	int target = -1;
+	for (int i = location; i < 144; i++)
+	{
+		int x = i%12;
+		int y = i/12;
+		if (board[y][x] == 0)//meet empty cell
+		{
+			target = i;
+			return target;
+		}
+	}
+	return target;
+}
+
+int Sudoku::BackTrack(int (&board)[12][12], int x, int y)
+{
+	if (Next(board, x + 12*y) == -1)//game finish
+		return true;
+	for (int i = 1; i < 10; i++)//guess from 1 to 9
+	{
+		board[y][x] = i;
+		if (CheckValid(board, x, y) == true)
+		{
+			int nextx = Next(board, x + 12*y)%12;
+			int nexty = Next(board, x + 12*y)/12;
+			if (BackTrack(board, nextx, nexty) == true)//do next cell
+			{
+				return true;
+			}
+		}
+	}
+	board[y][x] = 0;//no forget delete before go back
+	return false;
+}
+
+int Sudoku::Solve(int (&board)[12][12])
+{
+	int x = Next(board, 0)%12;//find first x
+	int y = Next(board, 0)/12;//find first y
+	BackTrack(board, x, y);
+	for (int i = 0; i < 12; i ++)
+	{
+		for (int j = 0; j < 12; j++)
+		{
+			cout << board[i][j] << " ";
+		}
+		cout << endl;
+	}
+	return 1;
+}
+
 void Sudoku::GiveQuestion()
 {
 	int board[144], count[9], swap[36];
@@ -129,6 +255,7 @@ void Sudoku::GiveQuestion()
 		cout << endl;
 	}
 }
+
 void Sudoku::ReadIn()
 {
 	for (int i = 0; i < 12; i++)
@@ -137,16 +264,5 @@ void Sudoku::ReadIn()
 		{
 			cin >> board[i][j];
 		}
-	}
-}
-void Sudoku::Solve(int board[12][12])
-{
-	for (int i = 0; i < 12; i ++)
-	{
-		for (int j = 0; j < 12; j++)
-		{
-			cout << board[i][j] << " ";
-		}
-		cout << endl;
 	}
 }
