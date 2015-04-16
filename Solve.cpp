@@ -1,6 +1,6 @@
 #include "Sudoku.h"
 using namespace std;
-int Next(int board[12][12], int x, int y);
+int Next(int board[12][12], int location);
 bool CheckUnity(int arr[], int size);
 bool CheckValid(int board[12][12], int x, int y);
 int BackTrack(int (&board)[12][12], int x, int y);
@@ -9,8 +9,8 @@ int main()
 {
 	Sudoku s;
 	s.ReadIn();
-	int x = Next(s.board, 0, 0)%12;//find first x
-	int y = Next(s.board, 0, 0)/12;//find first y
+	int x = Next(s.board, 0)%12;//find first x
+	int y = Next(s.board, 0)/12;//find first y
 	BackTrack(s.board, x, y);
 	s.Solve(s.board);
 	return 0;
@@ -36,20 +36,17 @@ bool CheckUnity(int arr[], int size)
 	return true;
 }
 
-int Next(int board[12][12], int x, int y)
+int Next(int board[12][12], int location)
 {
 	int target = -1;
-	for (int i = y; i < 12; i++)
+	for (int i = location; i < 144; i++)
 	{
-		for (int j = x; j < 12; j++)
+		int x = i%12;
+		int y = i/12;
+		if (board[y][x] == 0)//meet empty cell
 		{
-			if (board[i][j] == 0)//meet empty cell
-			{
-				x = j;
-				y = i;
-				target = x + y*12;
-				return target;
-			}
+			target = i;
+			return target;
 		}
 	}
 	return target;
@@ -109,21 +106,21 @@ bool CheckValid(int board[12][12], int x, int y)
 
 int BackTrack(int (&board)[12][12], int x, int y)
 {
-	if (Next(board, x, y) == -1)//game finish
+	if (Next(board, x + 12*y) == -1)//game finish
 		return true;
 	for (int i = 1; i < 10; i++)//guess from 1 to 9
 	{
-		board[x][y] = i;
+		board[y][x] = i;
 		if (CheckValid(board, x, y) == true)
 		{
-			int nextx = Next(board, x, y)%12;
-			int nexty = Next(board, x, y)/12;
+			int nextx = Next(board, x + 12*y)%12;
+			int nexty = Next(board, x + 12*y)/12;
 			if (BackTrack(board, nextx, nexty) == true)//do next cell
 			{
 				return true;
 			}
 		}
 	}
-	board[x][y] = 0;//no forget delete before go back
+	board[y][x] = 0;//no forget delete before go back
 	return false;
 }
