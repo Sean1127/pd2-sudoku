@@ -109,20 +109,25 @@ int Sudoku::BackTrack(int (&board)[12][12], int x, int y)
 	return false;
 }
 
-int Sudoku::Solve(int (&board)[12][12])
+void Sudoku::Solve(int (&board)[12][12])
 {
 	int x = Next(board, 0)%12;//find first x
 	int y = Next(board, 0)/12;//find first y
-	BackTrack(board, x, y);
-	for (int i = 0; i < 12; i ++)
+	int type = BackTrack(board, x, y);
+	if (type == true)
 	{
-		for (int j = 0; j < 12; j++)
+		cout << 1 << endl;
+		for (int i = 0; i < 12; i ++)
 		{
-			cout << board[i][j] << " ";
+			for (int j = 0; j < 12; j++)
+			{
+				cout << board[i][j] << " ";
+			}
+			cout << endl;
 		}
-		cout << endl;
 	}
-	return 1;
+	else if (type == false)
+		cout << 0 << endl;
 }
 
 void Sudoku::GiveQuestion()
