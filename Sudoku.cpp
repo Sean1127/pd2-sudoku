@@ -90,7 +90,7 @@ int Sudoku::Next(int board[12][12], int location)
 
 int Sudoku::BackTrack(int (&board)[12][12], int x, int y)
 {
-	if (Next(board, x + 12*y) == -1)//game finish
+	if (Next(board, x + 12*y) == -1)//game finish//
 	{
 		++type;
 		for (int i = 0; i < 12; i++)
@@ -128,8 +128,11 @@ void Sudoku::Solve(int (&board)[12][12])
 	int x = Next(board, 0)%12;//find first x
 	int y = Next(board, 0)/12;//find first y
 	type = 0;
+	for (int i = 0; i < 12; i ++)
+		for (int j = 0; j < 12; j++)
+			map[i][j] = 0;
 	type = BackTrack(board, x, y);
-	if (type != 0)
+	if (map[0][0])
 	{
 		cout << type << endl;
 		for (int i = 0; i < 12; i ++)
@@ -141,7 +144,7 @@ void Sudoku::Solve(int (&board)[12][12])
 			cout << endl;
 		}
 	}
-	else if (type == 0)
+	else
 		cout << type << endl;
 }
 
