@@ -4,6 +4,6 @@ int main()
 {
 	Sudoku s;
 	s.ReadIn();
-	s.Solve(s.board);
+	s.Solve();
 	return 0;
 }

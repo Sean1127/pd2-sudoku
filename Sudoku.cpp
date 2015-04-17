@@ -91,7 +91,16 @@ int Sudoku::Next(int board[12][12], int location)
 int Sudoku::BackTrack(int (&board)[12][12], int x, int y)
 {
 	if (Next(board, x + 12*y) == -1)//game finish
-		return true;
+	{
+		++type;
+		for (int i = 0; i < 12; i++)
+			for (int j = 0; j < 12; j++)
+				map[i][j] = board[i][j];
+		if (type == 2)
+			return true;
+		else
+			return false;
+	}
 	for (int i = 1; i < 10; i++)//guess from 1 to 9
 	{
 		board[y][x] = i;
@@ -109,25 +118,31 @@ int Sudoku::BackTrack(int (&board)[12][12], int x, int y)
 	return false;
 }
 
+void Sudoku::Solve()
+{
+	Solve(board);
+}
+
 void Sudoku::Solve(int (&board)[12][12])
 {
 	int x = Next(board, 0)%12;//find first x
 	int y = Next(board, 0)/12;//find first y
-	int type = BackTrack(board, x, y);
-	if (type == true)
+	type = 0;
+	type = BackTrack(board, x, y);
+	if (type != 0)
 	{
-		cout << 1 << endl;
+		cout << type << endl;
 		for (int i = 0; i < 12; i ++)
 		{
 			for (int j = 0; j < 12; j++)
 			{
-				cout << board[i][j] << " ";
+				cout << map[i][j] << " ";
 			}
 			cout << endl;
 		}
 	}
-	else if (type == false)
-		cout << 0 << endl;
+	else if (type == 0)
+		cout << type << endl;
 }
 
 void Sudoku::GiveQuestion()
@@ -230,12 +245,12 @@ void Sudoku::GiveQuestion()
 	{
 		if (board[i] != -1)
 		{
-			if (rand()%3 != 0)
+			if (rand()%7 != 0)
 				board[i] = 0;
 		}
 	}
-	j = (rand()%4)*36;
-	for (i = 0; i < 36; i++)//swap
+	j = (rand()%4)*36;//swap
+	for (i = 0; i < 36; i++)
 	{
 		swap[i] = board[i + j];
 	}
