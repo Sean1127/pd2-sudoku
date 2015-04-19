@@ -248,7 +248,7 @@ void Sudoku::GiveQuestion()
 	{
 		if (board[i] != -1)
 		{
-			if (rand()%7 != 0)
+			if (rand()%2 != 0)
 				board[i] = 0;
 		}
 	}
